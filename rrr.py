@@ -104,7 +104,7 @@ def main(args):
     imm.log("[+] Code traversed.")
     
     if results:
-        write_results(imm, results, print_all_found_flows)
+        write_results(imm, results, print_all_found_flows, found_insts)
     else:
         imm.log("[-] Something went wrong. Code could not be traversed.")
     
@@ -135,7 +135,7 @@ def parse_arguments(args):
 
     return args, depth, print_all_found_flows
 
-def write_results(imm, results, print_all_found_flows):
+def write_results(imm, results, print_all_found_flows,found_insts): # added in found_insts (they were not being passed)
     imm.setStatusBar("Writing results...")
     write_flows_to_file(results)
     rnd_str = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
@@ -204,6 +204,7 @@ def print_warning(imm):
     imm.log("[+] WARNING:") 
     imm.log("You have to understand that if jmp/call reg are found, ")
     imm.log("their computed jump address most probably won't be correct, ")
-    imm.log("because code is not eventually executed so register values are not real, ")
-    imm.log("but those when stored when the script is launched.")
+    #TODO Working to correct the issue warned about -- fix the registers
+    #imm.log("because code is not eventually executed so register values are not real, ")
+    #imm.log("but those when stored when the script is launched.")
 
