@@ -6,7 +6,7 @@ import struct
 import random
 
 SEP = ";"
-IP_REG = "EIP" # TODO: This depends on arch (x86, x64)
+IP_REG = "EIP" #newlog;; TODO: This depends on arch (x86, x64)
 PRINT_INST = 0
 DEFAULT_DEPTH = 20
 DEFAULT_PRINT_ALL = False
@@ -30,7 +30,7 @@ def replace_inst(reg):
 
 def store_insts(imm, registers):
     imm.setStatusBar("Searching instructions...")
-    hit_addrs = {} # using a dict because search is O(1) and can keep track of addr <-> inst
+    hit_addrs = {} #newlog:: using a dict because search is O(1) and can keep track of addr <-> inst
     for reg in registers:
         instructions = replace_inst(reg)
         for inst in instructions:
@@ -48,7 +48,7 @@ def check_addr_perms(imm, ip):
     page = imm.getMemoryPageByAddress(ip)
     if page:
         access = page.getAccess(human=True)
-        if not access or "PAGE_NOACCESS" == access: # usually, access=PAGE_EXECUTE_READ
+        if not access or "PAGE_NOACCESS" == access: #newlog;; usually, access=PAGE_EXECUTE_READ
             imm.log("[-] Incorrect permissions for address: 0x{0:0x}".format(ip))
             success = False
     else:
@@ -58,15 +58,15 @@ def check_addr_perms(imm, ip):
         success = False
     return success
 
-def traverse_code(imm, ip, depth, flow=[], final=[]): # remember that final is modified by reference ;)
-    #imm.log("[+] IP: 0x{0:0x}".format(ip))
-    #imm.log("[+] depth: {0}".format(depth))
-    #imm.log("[+] flow: {0}".format(flow))
-    #imm.log("[+] final: {0}".format(final))
+def traverse_code(imm, ip, depth, flow=[], final=[]): #newlog;; remember that final is modified by reference ;)
+    imm.log("[+] IP: 0x{0:0x}".format(ip))
+    imm.log("[+] depth: {0}".format(depth))
+    imm.log("[+] flow: {0}".format(flow))
+    imm.log("[+] final: {0}".format(final))
     if check_addr_perms(imm, ip):
             op = imm.disasm(ip)
             printable_inst = op.getResult()
-            # a list to keep inst. order and a dict to add more attributes to instruction addresses (keys)
+            #newlog;; a list to keep inst. order and a dict to add more attributes to instruction addresses (keys)
             flow.append({ip : [printable_inst]})
             depth -= 1
     else:
@@ -79,12 +79,12 @@ def traverse_code(imm, ip, depth, flow=[], final=[]): # remember that final is m
             traverse_code(imm, op.getJmpAddr(), depth, deepcopy(flow), final)
         ip += op.getSize()
         traverse_code(imm, ip, depth, deepcopy(flow), final)
-    return final # result for the caller out of the recursive cycle
+    return final #newlog;; result for the caller out of the recursive cycle
 
 def main(args):
     ret = "[*] PyCommand executed."
     imm = Debugger()
-    # TODO: replace this shit using argparse lib
+    #newlog::TODO: replace this using argparse lib
     if not args:
         usage(imm)
         return ret
@@ -139,7 +139,7 @@ def write_results(imm, results, print_all_found_flows):
     imm.setStatusBar("Writing results...")
     write_flows_to_file(results)
     rnd_str = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
-    already_written = set() # order does not matter, performance does
+    already_written = set() #newlog;; order does not matter, performance does
     found = False
     for flow in results:
         for inst in flow:
