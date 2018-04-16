@@ -6,7 +6,7 @@ import struct
 import random
 
 SEP = ";"
-IP_REG = "EIP" #newlog;; TODO: This depends on arch (x86, x64)
+IP_REG = "EIP" #Correct for the project's test cases
 PRINT_INST = 0
 DEFAULT_DEPTH = 20
 DEFAULT_PRINT_ALL = False
