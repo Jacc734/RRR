@@ -1,2 +1,0 @@
-LED (Lazy Exploit Developers)
-=============================
